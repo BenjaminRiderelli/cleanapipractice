@@ -5,11 +5,17 @@ dotenv.config();
 
 const entityErrCode = process.env.ENTITY_NOT_FOUND_ERR || "";
 
-// Define a generic type for a MongoDB model class
 type MongoDBModel<T extends Document> = Model<T>;
-// Define ArgsType as a generic type
-type ArgsType<T extends Document> = {
+
+type FindAllType<T extends Document> = {
   query: object;
+  model: MongoDBModel<T>;
+  populationFields: string[];
+  entity: string;
+};
+
+type FindOneType<T extends Document> = {
+  id: string;
   model: MongoDBModel<T>;
   populationFields: string[];
   entity: string;
@@ -18,16 +24,37 @@ type ArgsType<T extends Document> = {
 export const findAll = <T extends Document>({
   query,
   model,
-  populationFields = [],
+  populationFields,
   entity,
-}: ArgsType<T>) => {
+}: FindAllType<T>): ReturnType<MongoDBModel<T>["find"]> => {
   if (!model || !entity) {
-    throw new CustomError(entityErrCode, "entity not found", 404);
+     throw new Error("Model or entity not found");
   }
-  let operation: Query<T[], T> = model.find(query);
+  
+  let operation: ReturnType<MongoDBModel<T>["find"]> = model.find(query);
+
   if (populationFields.length > 0) {
     populationFields.forEach((popString: string) => {
       operation = operation.populate(popString);
+    });
+  }
+  return operation;
+};
+
+const findOne = <T extends Document>({
+  id,
+  model,
+  populationFields,
+  entity,
+}: FindOneType<T>): ReturnType<MongoDBModel<T>["findById"]> => {
+  if (!model || !entity) {
+    throw new CustomError(entityErrCode, "entity not found", 404);
+  }
+  let operation: ReturnType<MongoDBModel<T>["findById"]> = model.findById(id);
+
+  if (populationFields.length > 0) {
+    populationFields.forEach((popField: string) => {
+      operation = operation.populate(popField);
     });
   }
   return operation;

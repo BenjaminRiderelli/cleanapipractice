@@ -5,7 +5,6 @@ dotenv.config();
 const dbUrl = process.env.MONGO_URL;
 
 export const connectDB = async () => {
-  mongoose.set("strictQuery", false);
   try {
     if (!dbUrl) {
       throw new Error("no Url");
