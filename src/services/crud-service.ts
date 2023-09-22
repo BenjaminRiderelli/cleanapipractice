@@ -1,13 +1,8 @@
 import { Request, Response } from "express";
 import asyncHandler from "express-async-handler"
-
 import { GetAllType } from "./crud-types";
 import {
   findAllItems,
-  findItem,
-  createItem,
-  updateItem,
-  deleteItem,
 } from "./db-service";
 
 const getAll = ({ model, populationFields, entity }: GetAllType<any>) => {
