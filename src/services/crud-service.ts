@@ -5,7 +5,7 @@ import {
   findAllItems,
 } from "./db-service";
 
-const getAll = ({ model, populationFields, entity }: GetAllType<any>) => {
+export const getAll = ({ model, populationFields, entity }: GetAllType<any>) => {
   return asyncHandler(async (req: Request, res: Response) => {
     try {
       const allItems = await findAllItems({
@@ -14,7 +14,6 @@ const getAll = ({ model, populationFields, entity }: GetAllType<any>) => {
         entity,
         model,
       });
-
       res.status(200).json(allItems);
     } catch (e) {
       res.status(500).json({ message: e });
