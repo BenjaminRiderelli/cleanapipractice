@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { CustomError } from "../utils/customerror";
 
-const errorHandler = (
+export const errorHandler = (
   error: Error | CustomError | unknown,
   req: Request,
   res: Response,
@@ -18,5 +18,3 @@ const errorHandler = (
     return res.status(500).send({ message: "unknown error" });
   }
 };
-
-module.exports = errorHandler;

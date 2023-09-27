@@ -1,11 +1,8 @@
 import { Schema, model } from "mongoose";
 
-
-
-
-
 const exampleSchema = new Schema({
-    title:{type:String}
+    title:{type:String},
+    description:{type:String}
 })
 
 
