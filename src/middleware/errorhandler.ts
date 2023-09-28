@@ -3,7 +3,6 @@ import { CustomError } from "../utils/customerror";
 
 export const errorHandler = (
   error: Error | CustomError | unknown,
-  req: Request,
   res: Response,
   next: NextFunction
 ) => {
