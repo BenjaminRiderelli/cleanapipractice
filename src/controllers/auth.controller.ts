@@ -58,7 +58,7 @@ export const logInController = tryCatch(async (req: Request, res: Response) => {
   }
   const foundUser = await User.findOne({ email });
   if (!foundUser || !foundUser.comparePassword(password)) {
-    throw new CustomError(unauthorizedCode, "user or password incorrect", 400);
+    throw new CustomError(unauthorizedCode, "user or password incorrect", 401);
   }
   return res.status(200).json({
     token: foundUser.generateJWT(),

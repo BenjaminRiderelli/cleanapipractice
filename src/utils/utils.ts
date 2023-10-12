@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { CustomError } from "./customerror";
+import { errorHandler } from "../middleware/errorhandler";
 
 type ControllerType<T> = (
   req: Request,
@@ -13,6 +14,7 @@ export const tryCatch =
     try {
       await controller(req, res, next);
     } catch (error: CustomError | unknown | Error) {
-      return next(error);
+      errorHandler(error, res, next)
+      return next(error)
     }
   };
