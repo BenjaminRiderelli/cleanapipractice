@@ -1,30 +1,28 @@
+/// <reference path="../express-augmentations.ts" />
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { JwtMiddlewareType, JwtVerifier, JwtPayload } from "./types";
-import { CustomError } from "../utils/customerror";
+import { JwtVerifier, JwtPayload } from "./types";
+import { CustomError, unauthorizedCode } from "../utils/customerror";
 import { tryCatch } from "../utils/utils";
+import { NextFunction, Request, Response } from "express";
 dotenv.config();
-
 const jwtSecret = process.env.JWT_SECRET;
-const unauthorizedCode = process.env.UNAUTHORIZED || "401";
 
-export const jwtMiddleware = ({ req, res, next }: JwtMiddlewareType) => {
-  return tryCatch(async () => {
+export const jwtMiddleware = tryCatch(
+  async (req: Request, res: Response, next?: NextFunction) => {
     const authHeader = req.headers["authorization"];
-    if (!authHeader)
+    if (!jwtSecret) {
+      throw new CustomError("500", "Missing secret, Unauthorized", 500);
+    }
+    if (!authHeader) {
       throw new CustomError(
         unauthorizedCode,
         "Missing header, Unauthorized",
         401
       );
+    }
     const token = authHeader.split(" ")[1];
-    if (!token)
-      throw new CustomError(
-        unauthorizedCode,
-        "Missing token, Unauthorized",
-        401
-      );
-    if (!jwtSecret) {
+    if (!token) {
       throw new CustomError(
         unauthorizedCode,
         "Missing token, Unauthorized",
@@ -32,7 +30,7 @@ export const jwtMiddleware = ({ req, res, next }: JwtMiddlewareType) => {
       );
     }
 
-    let tokenPayload;
+    let tokenPayload: JwtPayload;
     try {
       tokenPayload = jwt.verify(token, jwtSecret) as JwtPayload;
     } catch (error) {
@@ -43,9 +41,12 @@ export const jwtMiddleware = ({ req, res, next }: JwtMiddlewareType) => {
       );
     }
     req.jwtPayload = tokenPayload;
-    next();
-  });
-};
+
+    if (next) {
+      next();
+    }
+  }
+);
 
 export const jwtVerifier = ({ token, callback }: JwtVerifier) => {
   if (jwtSecret) {
