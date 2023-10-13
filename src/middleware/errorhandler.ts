@@ -9,7 +9,7 @@ export const errorHandler = (
 ) => {
   res.header("Content-Type", 'application/json')
   if (error instanceof CustomError) {
-    console.error({
+    console.error("Custom Error",{
       code: error.errorCode,
       status: error.statusCode,
       message: error.message,

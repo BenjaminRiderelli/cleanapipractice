@@ -67,7 +67,6 @@ export const getOne = ({
 export const createOne = ({ model, requiredKeys }: CreateOneType<any>) => {
   return tryCatch(async (req, res) => {
     const data = req.body;
-    console.log(req.body);
     if (requiredKeys.length > 0) {
       let missingKeys: string[] = [];
       const missingKeysCount = requiredKeys.reduce((prev, current) => {
