@@ -64,7 +64,6 @@ export const logInController = tryCatch(async (req: Request, res: Response) => {
     token: foundUser.generateJWT(),
     user: {
       email: foundUser.email,
-      name: foundUser.name,
       id: foundUser._id,
     },
   });
