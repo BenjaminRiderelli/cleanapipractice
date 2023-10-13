@@ -3,10 +3,17 @@ import { CustomError } from "../utils/customerror";
 
 export const errorHandler = (
   error: Error | CustomError | unknown,
+  req:Request,
   res: Response,
   next: NextFunction
 ) => {
+  res.header("Content-Type", 'application/json')
   if (error instanceof CustomError) {
+    console.error({
+      code: error.errorCode,
+      status: error.statusCode,
+      message: error.message,
+    });
     return res.status(error.statusCode).json({
       errorCode: error.errorCode,
       message: error.message,

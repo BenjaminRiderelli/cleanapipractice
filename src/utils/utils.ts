@@ -14,7 +14,7 @@ export const tryCatch =
     try {
       await controller(req, res, next);
     } catch (error: CustomError | unknown | Error) {
-      errorHandler(error, res, next)
-      return next(error)
+      // errorHandler(error, res, next)
+      next(error)
     }
   };

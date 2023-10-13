@@ -7,7 +7,9 @@
   constructor(errorCode: string, message: string, statusCode: number) {
     super(message);
     this.errorCode = errorCode.toString();
+    this.name = "CustomError";
     this.statusCode = statusCode;
+    this.stack= ""
   }
 }
 
