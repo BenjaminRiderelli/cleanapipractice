@@ -8,7 +8,7 @@ if so, give it a star and you'll make me really happy :P
 
 # Get it going
 
-npm install and .env as follows is enough to get the rest api going and connected to your mongoDB
+npm install and .env as follows is enough to get the rest api going and connected to your mongoDB.
 MONGO_URL=
 HOST_URL=
 JWT_ISSUER=
