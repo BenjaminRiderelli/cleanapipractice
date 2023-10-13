@@ -20,7 +20,7 @@ Rest api's are one of the most common backend applications, with this template y
 
 - Register users and authenticate them (jwt)
 - Add jwtMiddleware to a route to make it private
-- Add centralized Error handling in a middleware
+- Add centralized Error handling in a middleware with user identification for protected routes
 - Use tryCatch utility function for effortless error handling.
 - invoke all basic CRUD operations on the models that you create by using the functions in the services folder and receive
 meaningfull errors if something happens.

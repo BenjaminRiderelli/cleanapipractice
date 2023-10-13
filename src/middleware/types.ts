@@ -4,9 +4,10 @@ export const emailRegex =
   /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export type JwtPayload = {
-  userId: string;
-  username: string;
-  email:string
+  id: string,
+  email: string,
+  iat: number,
+  iss: string
 }
 
 interface CustomRequest extends Request {

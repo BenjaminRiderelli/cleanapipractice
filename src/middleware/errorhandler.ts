@@ -3,13 +3,15 @@ import { CustomError } from "../utils/customerror";
 
 export const errorHandler = (
   error: Error | CustomError | unknown,
-  req:Request,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  res.header("Content-Type", 'application/json')
+  res.header("Content-Type", "application/json");
+
   if (error instanceof CustomError) {
-    console.error("Custom Error",{
+    console.error("Custom Error", {
+      usr: { id: req.jwtPayload?.id, email: req.jwtPayload?.email },
       code: error.errorCode,
       status: error.statusCode,
       message: error.message,
