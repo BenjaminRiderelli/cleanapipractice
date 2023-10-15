@@ -29,6 +29,8 @@ export const getAll = ({
   entity,
 }: GetAllType<any>) => {
   return tryCatch(async (req: Request, res: Response) => {
+
+
     if (!model || !entity) {
       throw new CustomError(missingDataError, "missing model or entity", 400);
     }

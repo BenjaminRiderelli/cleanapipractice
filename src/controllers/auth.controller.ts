@@ -1,31 +1,28 @@
-import express from "express";
 import { Request, Response } from "express";
 import { AuthBodyType } from "./auth.types";
 import { emailRegex } from "../middleware/types";
 import { User } from "../db/schemas/userSchema.schema";
-import { CustomError } from "../utils/customerror";
+import {
+  CustomError,
+  missingDataError,
+  unauthorizedCode,
+  creatingError,
+  wrongRoute,
+} from "../utils/customerror";
 import { tryCatch } from "../utils/utils";
-
-const creationErrorCode = process.env.CREATION_ERROR ?? "500";
-const unauthorizedCode = process.env.UNAUTHORIZED ?? "403";
-const missingData = process.env.MISSING_DATA ?? "403";
 
 export const registerController = tryCatch(
   async (req: Request, res: Response) => {
     const data: AuthBodyType = req.body;
     if (!data) {
-      throw new CustomError(missingData, "no body in the request", 400);
+      throw new CustomError(missingDataError, "no body in the request", 400);
     }
     if (!data.email || !data.email.match(emailRegex)) {
-      throw new CustomError(
-        creationErrorCode,
-        "Please enter a valid email",
-        400
-      );
+      throw new CustomError(creatingError, "Please enter a valid email", 400);
     }
     const existingUser = await User.findOne({ email: data.email });
     if (existingUser) {
-      throw new CustomError(creationErrorCode, "user already registered", 400);
+      throw new CustomError(creatingError, "user already registered", 400);
     } else {
       const newUser = new User({
         email: data.email,
@@ -41,11 +38,7 @@ export const registerController = tryCatch(
           },
         });
       } else {
-        throw new CustomError(
-          creationErrorCode,
-          "Error generating JWToken",
-          401
-        );
+        throw new CustomError(creatingError, "Error generating JWToken", 401);
       }
     }
   }
@@ -54,7 +47,7 @@ export const registerController = tryCatch(
 export const logInController = tryCatch(async (req: Request, res: Response) => {
   const { email, password }: AuthBodyType = req.body;
   if (!email || !password) {
-    throw new CustomError(missingData, "user or password missing", 400);
+    throw new CustomError(missingDataError, "user or password missing", 400);
   }
   const foundUser = await User.findOne({ email });
   if (!foundUser || !foundUser.comparePassword(password)) {
@@ -68,4 +61,3 @@ export const logInController = tryCatch(async (req: Request, res: Response) => {
     },
   });
 });
-
